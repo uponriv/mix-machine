@@ -72,7 +72,7 @@ class Word:
         self.word_list[x] = value
 
     def __getslice__(self, l, r):
-        """ get a part of a word
+        """get a part of a word
 
         On all operations when a partial field is used as an input, the sign
         is used if it is a part of the filed, otherwise the sign + is
