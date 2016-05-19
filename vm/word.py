@@ -72,6 +72,14 @@ class Word:
         self.word_list[x] = value
 
     def __getslice__(self, l, r):
+        """ get a part of a word
+
+        TODO
+
+        :param l:
+        :param r:
+        :return:
+        """
         l = max(l, 0)
         r = min(r, 5)
         new = Word()
@@ -82,6 +90,15 @@ class Word:
         return new
 
     def __setslice__(self, l, r, value):
+        """ set a put of a word
+
+        TODO
+
+        :param l:
+        :param r:
+        :param value:
+        :return:
+        """
         l = max(l, 0)
         r = min(r, 5)
         word = Word(value)
@@ -94,6 +111,11 @@ class Word:
         return self.word_list[1:] == ([0] * 5)
 
     def __cmp__(self, cmp_word):
+        """to tell if tow word is equal
+
+        :param cmp_word:
+        :return:
+        """
         if self.is_zero() and cmp_word.is_zero():
             return 0
         return 0 if all(self[i] == cmp_word[i] for i in xrange(0, 6)) else 1
@@ -108,6 +130,11 @@ class Word:
              self[1] * MAX_BYTE + self[2]] + self.word_list[3:])
 
     def __init__(self, obj=None):
+        """initialize a word by four ways.
+
+        the usage is quite like constructor overload in C++.
+        :param obj:
+        """
         if obj is None:
             self.word_list = [+1, 0, 0, 0, 0, 0]
         elif isinstance(obj, list) or isinstance(obj, tuple):
