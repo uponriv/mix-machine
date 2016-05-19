@@ -74,7 +74,20 @@ class Word:
     def __getslice__(self, l, r):
         """ get a part of a word
 
-        TODO
+        On all operations when a partial field is used as an input, the sign
+        is used if it is a part of the filed, otherwise the sign + is
+        understood. The field is shifted over to the right-hand part of the
+        register as it is loaded.
+
+        Hence suppose the original word w equals "- 01 16 03 05 04". Then
+
+        w[0:5]  "- 01 16 03 05 04"
+        w[1:5]  "+ 01 16 03 05 04"
+        w[3:5]  "+ 00 00 03 05 04"
+        w[0:3]  "- 00 00 01 16 03"
+        w[4:4]  "+ 00 00 00 00 05"
+        w[0:0]  "- 00 00 00 00 00"
+        w[1:1]  "+ 00 00 00 00 01"
 
         :param l:
         :param r:
@@ -123,6 +136,8 @@ class Word:
     def __str__(self):
         return reduce(lambda x, y: "%s %02i" % (x, y), self.word_list[1:6],
                       "+" if self[0] == 1 else "-")
+
+    __repr__ = __str__
 
     def addr_str(self):
         return "%s %04i %02i %02i %02i" % tuple(
