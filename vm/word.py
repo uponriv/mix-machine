@@ -89,6 +89,8 @@ class Word:
         w[0:0]  "- 00 00 00 00 00"
         w[1:1]  "+ 00 00 00 00 01"
 
+        This method would be used in instructions like LDA, LDX, LDi and so on.
+
         :param l:
         :param r:
         :return:
@@ -105,7 +107,17 @@ class Word:
     def __setslice__(self, l, r, value):
         """ set a put of a word
 
-        TODO
+        This method would be used in instructions like STA, STX, and so on.
+
+        On a store operation the field F has the opposite significance from
+        the load operation: THe number of bytes in the field is taken from
+        the right-hand portion of the register and shifted left if necessary
+        to be inserted in the proper field of CONTENTS(M). THe sign is not
+        altered unless it is part of the field.
+
+        For example,
+
+        w1 = ""
 
         :param l:
         :param r:
