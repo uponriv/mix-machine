@@ -1,3 +1,6 @@
+# encoding=utf-8
+from functools import reduce
+
 from vm_errors import *
 
 MAX_BYTE = 64
@@ -34,7 +37,7 @@ class Word:
         mask = MAX_BYTE - 1  # 1<<6 - 1
         u_num = abs(num)
         return [Word.sign(num)] + [
-            int((u_num >> shift) & mask) for shift in xrange(24, -1, -6)
+            int((u_num >> shift) & mask) for shift in range(24, -1, -6)
             ]  # 24 = 6 * (5-1)
 
     @staticmethod
@@ -61,17 +64,24 @@ class Word:
         :param word_list: a list
         :return: bool. True if word_list is a word
         """
-        return len(word_list) == 6 \
-               and word_list[0] in (1, -1) \
-               and all([0 <= byte < MAX_BYTE for byte in word_list[1:6]])
+        is_word_len = len(word_list) == 6
+        is_word_sign = word_list[0] in (1, -1)
+        is_word_byte = all([0 <= byte < MAX_BYTE for byte in word_list[1:6]])
+        return is_word_len and is_word_sign and is_word_byte
 
     def __getitem__(self, x):
-        return self.word_list[x]
+        if isinstance(x, slice):
+            return self.getslice(x.start, x.stop)
+        else:
+            return self.word_list[x]
 
     def __setitem__(self, x, value):
-        self.word_list[x] = value
+        if isinstance(x, slice):
+            self.setslice(x.start, x.stop, value)
+        else:
+            self.word_list[x] = value
 
-    def __getslice__(self, l, r):
+    def getslice(self, l, r):
         """get a part of a word
 
         On all operations when a partial field is used as an input, the sign
@@ -95,16 +105,16 @@ class Word:
         :param r:
         :return:
         """
-        l = max(l, 0)
-        r = min(r, 5)
+        l = max(l, 0) if l is not None else 0
+        r = min(r, 5) if r is not None else 5
         new = Word()
         if l == 0:
             new[0] = self[0]
-        for i in xrange(r, max(l - 1, 0), -1):
+        for i in range(r, max(l - 1, 0), -1):
             new[5 - r + i] = self[i]
         return new
 
-    def __setslice__(self, l, r, value):
+    def setslice(self, l, r, value):
         """ set a put of a word
 
         This method would be used in instructions like STA, STX, and so on.
@@ -124,26 +134,30 @@ class Word:
         :param value:
         :return:
         """
-        l = max(l, 0)
-        r = min(r, 5)
+        l = max(l, 0) if l is not None else 0
+        r = min(r, 5) if r is not None else 5
         word = Word(value)
         if l == 0:
             self[0] = word[0]
-        for i in xrange(r, max(l - 1, 0), -1):
+        for i in range(r, max(l - 1, 0), -1):
             self[i] = word[5 - r + i]
 
     def is_zero(self):
         return self.word_list[1:] == ([0] * 5)
 
-    def __cmp__(self, cmp_word):
+    def __eq__(self, cmp_word):
         """to tell if tow word is equal
 
         :param cmp_word:
         :return:
         """
         if self.is_zero() and cmp_word.is_zero():
-            return 0
-        return 0 if all(self[i] == cmp_word[i] for i in xrange(0, 6)) else 1
+            return True
+        return True if all(
+            self[i] == cmp_word[i] for i in range(0, 6)) else False
+
+    def __ne__(self, cmp_word):
+        return not self.__eq__(cmp_word)
 
     def __str__(self):
         return reduce(lambda x, y: "%s %02i" % (x, y), self.word_list[1:6],
@@ -166,7 +180,7 @@ class Word:
             self.word_list = [+1, 0, 0, 0, 0, 0]
         elif isinstance(obj, list) or isinstance(obj, tuple):
             self.word_list = list(obj)
-        elif isinstance(obj, int) or isinstance(obj, long):
+        elif isinstance(obj, int):
             self.word_list = self.from_dec(obj)
         elif isinstance(obj, Word):
             self.word_list = obj.word_list[:]

@@ -3,6 +3,7 @@ from word import *
 
 
 class WordTestCase(unittest.TestCase):
+
     def testCheckWord(self):
         tests = [
             ([+1, 0, 0, 0, 0, 0], True),
@@ -59,8 +60,10 @@ class WordTestCase(unittest.TestCase):
         self.assertEqual(word, Word([+1, 1, 0, 1, 0, 0]))
 
         self.assertEqual(word[:], Word([+1, 1, 0, 1, 0, 0]))
+
     def testSTA(self):
-        slices = map(lambda x: slice(*x), [(0,5), (1,5), (5,5), (2,2), (2,3), (0,1)])
+        slices = map(lambda x: slice(*x),
+                     [(0, 5), (1, 5), (5, 5), (2, 2), (2, 3), (0, 1)])
         outputs = [
             Word([1, 6, 7, 8, 9, 0]),
             Word([-1, 6, 7, 8, 9, 0]),
@@ -74,9 +77,9 @@ class WordTestCase(unittest.TestCase):
             word2 = Word([1, 6, 7, 8, 9, 0])
             word1[s] = word2
             self.assertEqual(word1, o)
+
     def testLDA(self):
         pass
-
 
 
 suite = unittest.makeSuite(WordTestCase, 'test')
