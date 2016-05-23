@@ -74,7 +74,7 @@ class VMachine:
                     i].word_list) or
                             (i not in memory_dict and self[
                                 i].word_list != positive_zero)
-                    for i in xrange(VMachine.MEMORY_SIZE)):
+                    for i in range(VMachine.MEMORY_SIZE)):
             return False
         else:
             return True
@@ -102,7 +102,7 @@ class VMachine:
 
     def init_stuff(self, start_address):
         self.rA, self.rX, self.r0, self.r1, self.r2, self.r3, self.r4, self.r5, self.r6, self.rJ = \
-            [Word(0) for _ in xrange(10)]
+            [Word(0) for _ in range(10)]
         self.cf = 0
         self.of = False
         self.cur_addr = start_address
