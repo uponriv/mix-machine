@@ -1,6 +1,6 @@
 # operations.py
 
-# maps instruction to (C_CODE, F_CODE)
+# maps instruction to (C_CODE, F_CODE, is_field_fixed)
 _instructions = {
     "NOP": (0, 0, False),
     "ADD": (1, 5, False),
