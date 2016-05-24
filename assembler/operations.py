@@ -161,6 +161,7 @@ _instructions = {
     "CMPX": (63, 5, False)
 }
 
+# I do not understand "END" yet.
 _directives = ("EQU", "ORIG", "END", "CON", "ALF")
 
 _valid_stuff = set(_instructions.keys()) | set(_directives)
