@@ -1,3 +1,4 @@
+# encoding=utf-8
 # symbol_table.py
 
 # module for find labels and creating table of them
@@ -13,7 +14,7 @@ def is_local_label(label):
 
 def is_local_label_reference(label):
     return len(label) == 2 and label[0].isdigit() and label[1] in (
-    'F', 'B', 'f', 'b')
+        'F', 'B', 'f', 'b')
 
 
 def is_label(s):
@@ -27,12 +28,13 @@ class SymbolTable:
         self.labels = {} if labels is None else labels
         self.local_labels = {} if local_labels is None else local_labels
 
-    def set_label(self, label, address, lineno):
+    def set_label(self, label, address, line_number):
         if label is None:
             return
 
         if is_local_label(label):
-            self.local_labels.setdefault(label, []).append((address, lineno))
+            self.local_labels.setdefault(label, []).append(
+                (address, line_number))
         else:
             if label in self.labels:
                 raise RepeatedLabelError(label)
@@ -40,7 +42,10 @@ class SymbolTable:
             self.labels[label] = address
 
     def add_literal(self, value_and_sign):
-        """This is called on the 2nd pass from parse_argument. Returns an address for the value"""
+        """This is called on the 2nd pass from parse_argument. Returns an
+        address for the value
+
+        """
         self.literals.append(value_and_sign)
         self.literal_address += 1
         return self.literal_address - 1
