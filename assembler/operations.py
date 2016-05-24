@@ -189,5 +189,5 @@ def is_field_fixed(operation):
 def get_codes(instr):
     try:
         return tuple(_instructions[instr][:2])
-    except:
-        return (None, 5)
+    except KeyError:
+        return None, 5
