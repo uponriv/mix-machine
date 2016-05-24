@@ -3,6 +3,7 @@ from execution import *
 from word_parser import *
 from word import *
 
+# what is triggers for?
 TRIGGERS = "cf of cur_addr halted cycles".split()
 
 
@@ -14,7 +15,16 @@ class VMachine:
     RW_LOCKED = 1  # this cells are locked for read and write
 
     def __getitem__(self, x):
-        """Can raise exception"""
+        """ Get memory or register word of virtual machine
+
+        :type x: int | str | slice
+        :param x:
+            int like 2000, 3000 access memory
+            str like A, I, X J access register
+            slice like vm['A':2:4] is OK...
+        Can raise exception
+
+        """
         if x in TRIGGERS:
             return self.__dict__[x]
         if isinstance(x, slice):  # slice, vm[2000:2:4] = ...
@@ -42,9 +52,9 @@ class VMachine:
         if isinstance(item, int):
             # we are working with memory
             self.memory[item][left:right] = value
-            if self.mem_hook is not None and old_value.word_list != self.memory[
-                item].word_list:
-                self.mem_hook(item, old_value, self.memory[item])
+            if self.mem_hook is not None:
+                if old_value.word_list != self.memory[item].word_list:
+                    self.mem_hook(item, old_value, self.memory[item])
         else:
             # we are working with registers or triggers
             if item in TRIGGERS:
@@ -69,13 +79,15 @@ class VMachine:
     def cmp_memory(self, memory_dict):
         """Need for testing"""
         positive_zero = [+1, 0, 0, 0, 0, 0]
-        if not isinstance(memory_dict, dict) or \
-                any((i in memory_dict and self[i].word_list != memory_dict[
-                    i].word_list) or
-                            (i not in memory_dict and self[
-                                i].word_list != positive_zero)
-                    for i in range(VMachine.MEMORY_SIZE)):
+        if not isinstance(memory_dict, dict):
             return False
+        for i in range(VMachine.MEMORY_SIZE):
+            if i in memory_dict:
+                if self[i].word_list != memory_dict[i].word_list:
+                    return False
+            else:
+                if self[i].word_list != positive_zero:
+                    return False
         else:
             return True
 
@@ -120,7 +132,8 @@ class VMachine:
 
     def is_writeable(self, addr):
         return addr not in (
-        self.locked_cells[self.W_LOCKED] | self.locked_cells[self.RW_LOCKED])
+            self.locked_cells[self.W_LOCKED] | self.locked_cells[
+                self.RW_LOCKED])
 
     def is_readable_set(self, _set):
         return len(_set & self.locked_cells[self.RW_LOCKED]) == 0
