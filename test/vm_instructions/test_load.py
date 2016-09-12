@@ -1,5 +1,7 @@
+# encoding=utf-8
 import unittest
 from basetestcase import *
+
 
 class VMLoadTestCase(VMBaseTestCase):
   def testNormal(self):
