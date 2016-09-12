@@ -8,7 +8,7 @@ class Memory:
     return [1, 0 ,0 ,0 ,0 ,0]
 
   def __init__(self):
-    self.memory = [ self.positive_zero()[:] for _ in xrange(MEMORY_SIZE)]
+    self.memory = [ self.positive_zero()[:] for _ in range(MEMORY_SIZE)]
 
   def __getitem__(self, index):
     return self.memory[index]
@@ -31,7 +31,7 @@ class Memory:
     if not isinstance(memory_dict, dict) or \
        any( (i     in memory_dict and self[i] != memory_dict[i]) or
             (i not in memory_dict and self[i] != positive_zero)
-            for i in xrange(MEMORY_SIZE)):
+            for i in range(MEMORY_SIZE)):
       return 1
     else:
       return 0
@@ -48,7 +48,7 @@ class Memory:
     mask = 63     # 1<<6 - 1
     u_num = abs(num)
 
-    return [Memory.sign(num)] + [ (u_num >> shift) & mask for shift in xrange(24, -1, -6) ]
+    return [Memory.sign(num)] + [ (u_num >> shift) & mask for shift in range(24, -1, -6) ]
 
   @staticmethod
   def sign(x):
@@ -64,7 +64,7 @@ class Memory:
     if not ( 0 <= l <= 5 and 0 <= r <= 5 and l <= r ):
       return None
     value_word = Memory.dec2mix(value)
-    for i in xrange(r, max(l - 1, 0), -1): # [r, ..., l]
+    for i in range(r, max(l - 1, 0), -1): # [r, ..., l]
       word[i] = value_word[5 - r + i]
     if l == 0:
       word[0] = value_word[0]

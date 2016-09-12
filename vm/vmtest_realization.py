@@ -122,7 +122,7 @@ class VMTesting:
 
   def state(self):
     """Returns MEGA hash"""
-    mega = dict([ (i, self.vm[i].word_list[:]) for i in xrange(self.vm.MEMORY_SIZE) ])
+    mega = dict([ (i, self.vm[i].word_list[:]) for i in range(self.vm.MEMORY_SIZE) ])
 
     for reg in "AXJ":
       mega[reg] = self.vm.reg(reg).word_list[:]

@@ -23,7 +23,7 @@ def print_errors(errors):
     print "%04i: %s" % (error[0], error[1])
 
 def write_memory(file, memory):
-  for i in xrange(len(memory)):
+  for i in range(len(memory)):
     if memory[i] != Memory.positive_zero():
       file.write("%04i %+2i %02i %02i %02i %02i %02i\n" % tuple([i] + memory[i]))
 

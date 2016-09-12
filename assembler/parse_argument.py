@@ -226,7 +226,7 @@ class ArgumentParser:
         # now s - string with len = 5
 
         word = Memory.positive_zero()
-        for i in xrange(1, 6):
+        for i in range(1, 6):
             word[i] = charset.ord(s[i - 1])
             if word[i] is None:
                 raise InvalidCharError(s[i - 1])

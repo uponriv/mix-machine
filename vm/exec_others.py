@@ -53,7 +53,7 @@ def move(vmachine):
     raise InvalidMoveError( (num, src, dst) )
   # now all addresses would be greater than dst or src, so they are >= 0
   try:
-    for i in xrange(num):
+    for i in range(num):
       vmachine[dst] = vmachine[src+i]
       dst += 1 # dst - like r1 always contains address of next destination word
       vmachine["cycles"] += 2

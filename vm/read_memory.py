@@ -35,7 +35,7 @@ def read_memory(lines):
     errors.append( (1, InvalidStartAddressError("")) )
 
   memory = {}
-  for i in xrange(1, len(lines)):
+  for i in range(1, len(lines)):
     try:
       res = parse_word(lines[i])
     except VMError, e:

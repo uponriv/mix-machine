@@ -109,7 +109,7 @@ def parse_lines(lines):
     result = []
 
     has_end = False
-    for i in xrange(len(lines)):
+    for i in range(len(lines)):
         try:
             line = parse_line(lines[i])
         except AssemblyError, error:
