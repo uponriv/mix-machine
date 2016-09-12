@@ -47,7 +47,7 @@ class VMTesting:
         while not self.vm.halted:
           self.vm.step()
       return self.vm.cycles
-    except VMError, e:
+    except VMError as e:
       raise error_dict[type(e)]
 
   def hook(self, item, old, new):
